@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes-app-deployment
+  labels:
+    app: notes-app
+  namespace: notes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notes-app
+  template:
+    metadata:
+      labels:
+        app: notes-app
+    spec:
+      containers:
+      - name: notes-app
+        image: sumitsen2004/notes-app:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_HOST
+          value: "mysql-service"  # <-- The name of your MySQL service in Kubernetes
+        - name: DB_NAME
+          value: "notes_db"       # <-- The name of your database
+        - name: DB_USER
+          value: "root"      # <-- Your database username
+        - name: DB_PASSWORD
+          value: "root" # <-- IMPORTANT: Use Kubernetes Secrets for this in production!
